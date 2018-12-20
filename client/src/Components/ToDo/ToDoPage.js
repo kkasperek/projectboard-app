@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AddForm from "./AddForm";
 import TodoItems from "./ToDoItems";
 import ProjectContainer from "./ProjectContainer";
+import API from "../../utils/API";
 
 class ToDoPage extends Component {
   inputElement = React.createRef();
@@ -15,6 +16,17 @@ class ToDoPage extends Component {
       }
     };
   }
+  componentDidMount(){
+   
+  }
+  // Load all tasks saved
+  loadItems = () => {
+    API.getProjects()
+    .then(res => 
+      this.setState({items: res.data})
+    )
+  }
+  // Delete Item
   deleteItem = key => {
     const filteredItems = this.state.items.filter(item => {
       return item.key !== key;
@@ -23,7 +35,7 @@ class ToDoPage extends Component {
       items: filteredItems
     });
   };
-
+  // Handle form input
   handleInput = e => {
     const itemText = e.target.value;
     const currentItem = { text: itemText, key: Date.now() };
@@ -31,6 +43,7 @@ class ToDoPage extends Component {
       currentItem
     });
   };
+  // Add new item to todo list
   addItem = e => {
     e.preventDefault();
     const newItem = this.state.currentItem;
